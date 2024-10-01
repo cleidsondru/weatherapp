@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 type WeatherMap = { [id: number]: WeatherResponse };
 
 type unitType = 'metric' | 'imperial';
+
 export interface WeatherAppState {
     isLoggingIn: boolean;
     isLoadingWeather: boolean;
