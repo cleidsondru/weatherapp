@@ -1,0 +1,2 @@
+export const TESTER_EMAIL = process.env.EXPO_PUBLIC_TESTER_EMAIL;
+export const TESTER_PASSWORD_HASH = process.env.EXPO_PUBLIC_TESTER_PASSWORD_HASH;

@@ -6,16 +6,7 @@ type ThemedButtonProps = TouchableOpacityProps & { title: string };
 
 const ThemedButton = ({ title, ...rest }: ThemedButtonProps) => {
     return (
-        <TouchableOpacity
-            style={{
-                backgroundColor: '#256EFF',
-                padding: 10,
-                borderRadius: 5,
-                width: '100%',
-                alignItems: 'center',
-            }}
-            {...rest}
-        >
+        <TouchableOpacity style={styles.button} {...rest}>
             <ThemedText type='subtitle' darkColor='white' lightColor='white'>
                 {title}
             </ThemedText>
@@ -25,4 +16,12 @@ const ThemedButton = ({ title, ...rest }: ThemedButtonProps) => {
 
 export default ThemedButton;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    button: {
+        backgroundColor: '#256EFF',
+        padding: 10,
+        borderRadius: 5,
+        width: '100%',
+        alignItems: 'center',
+    },
+});

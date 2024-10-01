@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import React from 'react';
 import { ThemedText } from '@/components/ThemedText';
 import ThemedTextInput from '@/components/ThemedTextInput';
@@ -7,6 +7,10 @@ import { object, string } from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import BaseScreen from '@/components/BaseScreen';
+import { LoginRequest } from '@/types/weather';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { login } from '@/store/weatherSlice';
+import { router } from 'expo-router';
 
 const LoginSchema = object().shape({
     email: string().required('Email is required').email('Invalid Email'),
@@ -16,11 +20,10 @@ const LoginSchema = object().shape({
 });
 
 const AuthScreen = () => {
-    const {
-        control,
-        handleSubmit,
-        formState: { errors },
-    } = useForm({
+    const dispatch = useAppDispatch();
+    const isLoggingIn = useAppSelector((state) => state.weather.isLoggingIn);
+    const userEmail = useAppSelector((state) => state.weather.userEmail);
+    const { control, handleSubmit, reset } = useForm({
         resolver: yupResolver(LoginSchema),
         defaultValues: {
             email: '',
@@ -28,12 +31,21 @@ const AuthScreen = () => {
         },
     });
 
-    const onPressLogin = (data: any) => console.log('login', data);
+    React.useEffect(() => {
+        if (!isLoggingIn && userEmail.length) {
+            router.replace('/(tabs)');
+        }
+    }, [isLoggingIn, userEmail]);
+
+    const onPressLogin = ({ email, password }: LoginRequest) => {
+        dispatch(login({ email, password }));
+        // reset();
+    };
 
     return (
         <BaseScreen>
             <ThemedText type='title'>WeatherApp</ThemedText>
-            <View style={styles.fullWidth}>
+            <View style={styles.formContainer}>
                 <Controller
                     control={control}
                     rules={{ required: true }}
@@ -64,7 +76,11 @@ const AuthScreen = () => {
                     name='password'
                 />
             </View>
-            <ThemedButton title='Login' onPress={handleSubmit(onPressLogin)} />
+            {!isLoggingIn ? (
+                <ThemedButton title='Login' onPress={handleSubmit(onPressLogin)} />
+            ) : (
+                <ActivityIndicator size='large' />
+            )}
         </BaseScreen>
     );
 };
@@ -87,5 +103,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
     },
     inputMarging: { marginBottom: 30 },
-    fullWidth: { width: '100%' },
+    formContainer: {
+        width: '100%',
+        gap: 30,
+    },
 });

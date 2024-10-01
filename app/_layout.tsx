@@ -4,6 +4,8 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import bcrypt from 'react-native-bcrypt';
+import isaac from 'isaac';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { SafeAreaView } from 'react-native';
@@ -18,7 +20,10 @@ export default function RootLayout() {
     const [loaded] = useFonts({
         SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     });
-
+    bcrypt.setRandomFallback((len) => {
+        const buf = new Array<number>(len);
+        return buf.map(() => Math.floor(isaac.random() * 256));
+    });
     useEffect(() => {
         if (loaded) {
             SplashScreen.hideAsync();
@@ -33,9 +38,9 @@ export default function RootLayout() {
         <Provider store={store}>
             <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
                 <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-                    <Stack initialRouteName='homeScreen' screenOptions={{ headerShown: false }}>
+                    <Stack initialRouteName='(tabs)' screenOptions={{ headerShown: false }}>
                         <Stack.Screen name='index' />
-                        <Stack.Screen name='homeScreen' />
+                        <Stack.Screen name='(tabs)' />
                         <Stack.Screen name='authScreen' />
                         <Stack.Screen name='+not-found' />
                     </Stack>

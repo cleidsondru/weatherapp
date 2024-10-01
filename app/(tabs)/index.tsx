@@ -6,12 +6,13 @@ import { object, string } from 'yup';
 import ThemedTextInput from '@/components/ThemedTextInput';
 import ThemedButton from '@/components/ThemedButton';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { deleteWeather, fetchWeather } from '@/store/weatherSlice';
+import { fetchWeather } from '@/store/weatherSlice';
 import { LocationRequest } from '@/types/weather';
 import WeatherCard from '@/components/WeatherCard';
 import { ThemedText } from '@/components/ThemedText';
+import { MAX_LOCATIONS } from '@/constants/App';
 
-const locationSchema = object({
+const locationSchema = object().shape({
     city: string().required('A city name is required'),
     countryCode: string().required('A country code is required'),
 });
@@ -25,11 +26,10 @@ const HomeScreen = () => {
         dispatch(fetchWeather(values));
         resetForm();
     };
-    console.log(JSON.stringify(weatherMap));
 
     return (
         <BaseScreen style={styles.main}>
-            {weatherMapKeys.length < 3 ? (
+            {weatherMapKeys.length < MAX_LOCATIONS ? (
                 <Formik
                     initialValues={{ city: '', countryCode: '' }}
                     validationSchema={locationSchema}
@@ -39,9 +39,9 @@ const HomeScreen = () => {
                         <View style={{ width: '100%', gap: 20 }}>
                             <ThemedText type='subtitle' style={{ textAlign: 'center' }}>
                                 You can include
-                                {3 - weatherMapKeys.length === 1
+                                {MAX_LOCATIONS - weatherMapKeys.length === 1
                                     ? ` 1 more location`
-                                    : ` ${3 - weatherMapKeys.length} locations`}
+                                    : ` ${MAX_LOCATIONS - weatherMapKeys.length} locations`}
                             </ThemedText>
                             <ThemedTextInput
                                 onChangeText={handleChange('city')}
@@ -69,9 +69,7 @@ const HomeScreen = () => {
                 const id = parseInt(key);
                 const weather = weatherMap[id];
 
-                return (
-                    <WeatherCard key={key} weather={weather} onClose={() => deleteWeather(id)} />
-                );
+                return <WeatherCard key={key} weather={weather} />;
             })}
         </BaseScreen>
     );

@@ -1,4 +1,5 @@
 export type LocationRequest = { city: string; countryCode: string };
+export type LoginRequest = { email: string; password: string };
 
 export type WeatherDesc = {
     description: string;
