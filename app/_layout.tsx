@@ -7,6 +7,8 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { SafeAreaView } from 'react-native';
+import { Provider } from 'react-redux';
+import { store } from '@/store/store';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -28,15 +30,17 @@ export default function RootLayout() {
     }
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-                <Stack initialRouteName='homeScreen' screenOptions={{ headerShown: false }}>
-                    <Stack.Screen name='index' />
-                    <Stack.Screen name='homeScreen' />
-                    <Stack.Screen name='authScreen' />
-                    <Stack.Screen name='+not-found' />
-                </Stack>
-            </ThemeProvider>
-        </SafeAreaView>
+        <Provider store={store}>
+            <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
+                <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+                    <Stack initialRouteName='homeScreen' screenOptions={{ headerShown: false }}>
+                        <Stack.Screen name='index' />
+                        <Stack.Screen name='homeScreen' />
+                        <Stack.Screen name='authScreen' />
+                        <Stack.Screen name='+not-found' />
+                    </Stack>
+                </ThemeProvider>
+            </SafeAreaView>
+        </Provider>
     );
 }
