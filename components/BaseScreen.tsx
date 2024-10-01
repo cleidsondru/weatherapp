@@ -12,6 +12,7 @@ const BaseScreen = ({ children, style }: ViewProps) => {
                 <ScrollView
                     style={styles.scrollView}
                     contentContainerStyle={[styles.scrollViewContainer, style]}
+                    showsVerticalScrollIndicator={false}
                 >
                     {children}
                 </ScrollView>
@@ -36,5 +37,6 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'space-around',
+        paddingBottom: 50,
     },
 });

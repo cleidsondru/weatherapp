@@ -34,44 +34,35 @@ const AuthScreen = () => {
         <BaseScreen>
             <ThemedText type='title'>WeatherApp</ThemedText>
             <View style={styles.fullWidth}>
-                <View style={styles.inputMarging}>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <ThemedTextInput
-                                value={value}
-                                onBlur={onBlur}
-                                onChangeText={onChange}
-                                placeholder='Username'
-                            />
-                        )}
-                        name='email'
-                    />
-                    {errors.email?.message ? (
-                        <ThemedText type='default' lightColor='red' darkColor='red'>
-                            {errors.email.message}
-                        </ThemedText>
-                    ) : undefined}
-                </View>
                 <Controller
                     control={control}
                     rules={{ required: true }}
-                    render={({ field: { onChange, onBlur, value } }) => (
+                    render={({ field: { onChange, onBlur, value }, formState: { errors } }) => (
+                        <ThemedTextInput
+                            value={value}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            placeholder='Email'
+                            error={errors.email?.message}
+                        />
+                    )}
+                    name='email'
+                />
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value }, formState: { errors } }) => (
                         <ThemedTextInput
                             value={value}
                             onBlur={onBlur}
                             onChangeText={onChange}
                             placeholder='Password'
+                            secureTextEntry
+                            error={errors.password?.message}
                         />
                     )}
                     name='password'
                 />
-                {errors.password?.message ? (
-                    <ThemedText type='default' lightColor='red' darkColor='red'>
-                        {errors.password.message}
-                    </ThemedText>
-                ) : undefined}
             </View>
             <ThemedButton title='Login' onPress={handleSubmit(onPressLogin)} />
         </BaseScreen>

@@ -1,17 +1,35 @@
 import React from 'react';
-import { StyleSheet, TextInput, TextInputProps } from 'react-native';
+import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { ThemedText } from './ThemedText';
 
-type ThemedTextInputProps = TextInputProps & {
+interface ThemedTextInputProps extends TextInputProps {
     lightColor?: string;
     darkColor?: string;
-};
+    error?: string;
+}
 
-const ThemedTextInput = ({ style, lightColor, darkColor, ...rest }: ThemedTextInputProps) => {
+const ThemedTextInput = ({
+    style,
+    lightColor,
+    darkColor,
+    error,
+    ...rest
+}: ThemedTextInputProps) => {
     const borderColor = useThemeColor({ light: lightColor, dark: darkColor }, 'borderColor');
     const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
 
-    return <TextInput style={[styles.default, { borderColor, color }, style]} {...rest} />;
+    return (
+        <View style={styles.inputContainer}>
+            <TextInput style={[styles.default, { borderColor, color }, style]} {...rest} />
+            {error && error?.length ? (
+                <ThemedText lightColor='red' darkColor='red'>
+                    {error}
+                </ThemedText>
+            ) : undefined}
+        </View>
+    );
+    return;
 };
 
 export default ThemedTextInput;
@@ -26,4 +44,5 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         paddingHorizontal: 5,
     },
+    inputContainer: { width: '100%' },
 });
